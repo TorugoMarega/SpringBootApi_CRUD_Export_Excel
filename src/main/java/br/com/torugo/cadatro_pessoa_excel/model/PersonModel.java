@@ -30,6 +30,11 @@ public class PersonModel implements Serializable{
     @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     private LocalDateTime created_at = LocalDateTime.now();
 
+    @Column(nullable = false, length = 16)
+    private String password;
+
+    @Column(length = 11, nullable = false)
+    private String cpf;
 
     @OneToOne(cascade=CascadeType.ALL)
     private AccountModel account;

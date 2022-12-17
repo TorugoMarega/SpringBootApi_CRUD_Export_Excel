@@ -1,5 +1,6 @@
 package br.com.torugo.cadatro_pessoa_excel.controller;
 
+import br.com.torugo.cadatro_pessoa_excel.DTO.LoginDTO;
 import br.com.torugo.cadatro_pessoa_excel.DTO.PersonDTO;
 import br.com.torugo.cadatro_pessoa_excel.model.PersonModel;
 import br.com.torugo.cadatro_pessoa_excel.exception.GenericException;
@@ -15,7 +16,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
-@RequestMapping("/person")
+@RequestMapping("/users")
 public class PersonController {
     @Autowired
     private PersonService service;
@@ -25,7 +26,7 @@ public class PersonController {
     public ResponseEntity createPerson(@RequestBody PersonModel personModel){
         try{
             if(this.service.existsByEmail(personModel)){
-                PersonDTO personDTO = new PersonDTO(personModel.getName(), personModel.getEmail());
+                PersonDTO personDTO = new PersonDTO(personModel.getName(), personModel.getEmail(), personModel.getCpf(), personModel.getPassword());
                 GenericException ex = new GenericException("Usuário já Cadastrado com este email!", personDTO, LocalDateTime.now());
                 throw ex;
             }else {
@@ -64,5 +65,9 @@ public class PersonController {
         return this.service.listAllPerson();
     }
 
+    @PostMapping(produces = "application/json", path = "/login")
+    public Boolean verifyLogin(@RequestBody LoginDTO loginDTO){
+        return this.service.verifyLogin(loginDTO);
+    }
 
 }
